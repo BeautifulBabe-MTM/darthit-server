@@ -9,14 +9,21 @@ const sharp = require('sharp');
 const app = express();
 const port = 3000;
 
-mongoose.connect('mongodb+srv://dart-hit:qwerty123zxc34@cluster0.ap1ucz1.mongodb.net/spanish-bot', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb+srv://dart-hit:qwerty123zxc34@cluster0.ap1ucz1.mongodb.net/test', { useNewUrlParser: true, useUnifiedTopology: true });
 
-const reviewSchema = new mongoose.Schema({
-    file: Buffer,
-    text: String,
+const usersSchema = new mongoose.Schema({
+    userId: Number,
+    phoneNumber: String,
+    username: String,
+    name: String,
+    balance: Number,
+    luck: Number,
+    min_balance_to_payout: Number,
+    deposit_amounts: Array,
+    hasBeenCounted: Boolean
 });
 
-const Reviews = mongoose.model('reviews', reviewSchema);
+const Users = mongoose.model('users', usersSchema);
 
 const corsOptions = {
     origin: 'https://spanish-bot-crud-production.up.railway.app/',
@@ -43,68 +50,35 @@ app.get('/', (req, res) => {
 
 app.use('/uploads', express.static('uploads'));
 
-app.post('/add', async (req, res) => {
-    // var form = new multiparty.Form();
-
-    // form.parse(req, async function (err, fields, files) {
-    //     let file = files.file[0];
-
-    //     if (file) {
-
-    //         const buffer = fs.readFileSync(file.path);
-
-    //         const maxFileSize = 125 * 1024; // 125 КБ в байтах
-
-    //         if (buffer.length > maxFileSize) {
-    //             const resizedBuffer = await sharp(buffer)
-    //                 .resize({ fit: 'inside', width: 500 })
-    //                 .toBuffer();
-
-    //             if (resizedBuffer.length > maxFileSize) {
-    //                 console.log("Error: File size still exceeds limit after resizing");
-    //                 res.status(400).json({ error: 'Размер файла превышает 125КБ' });
-    //                 return;
-    //             }
-
-    //             file.buffer = resizedBuffer;
-    //         } else {
-    //             file.buffer = 'https://upload.wikimedia.org/wikipedia/commons/b/ba/Error-logo.png';
-    //         }
-
-    //         const newItem = new Reviews({
-    //             file: file.buffer,
-    //             text: '@kipikh',
-    //         });
-
-    //         await newItem.save();
-    //         // res.json({ fileUrl: `/uploads/${btoa(String.fromCharCode.apply(null, new Uint8Array(newItem.file.data)))}` });
-    //     }
-    //     else {
-    //         console.log("Error: File missing!")
-    //     }
-    // });
-
-    const imageUrl = req.body.file; 
-    const text = req.body.text;
-
-    try {
-        const newItem = new Reviews({
-            file: imageUrl, 
-            text: text, 
-        });
-
-        await newItem.save();
-        return res.json({ message: 'Файл успешно сохранен' });
-    } catch (error) {
-        console.error('Ошибка при сохранении ссылки на фото', error);
-        return res.status(500).json({ error: 'Произошла ошибка при сохранении ссылки на фото' });
-    }
-
-});
+//app.post('/add', async (req, res) => {
+//    const userId = req.body.userId; 
+//    const phoneNumber = req.body.phoneNumber;
+//
+//    try {
+//        const newItem = new Users({
+//            userId: Number,
+//            phoneNumber: String,
+//            username: String,
+//            name: String,
+//            balance: Number,
+//            luck: Number,
+//            min_balance_to_payout: Number,
+//            deposit_amounts: Array,
+//            hasBeenCounted: Boolean
+//        });
+//
+//        await newItem.save();
+//        return res.json({ message: 'Файл успешно сохранен' });
+//    } catch (error) {
+//        console.error('Ошибка при сохранении ссылки на фото', error);
+//        return res.status(500).json({ error: 'Произошла ошибка при сохранении ссылки на фото' });
+//    }
+//
+//});
 
 app.get('/items', async (req, res) => {
     try {
-        const items = await Reviews.find({});
+        const items = await Users.find({});
         res.json(items);
     } catch (err) {
         console.error(err);
@@ -113,9 +87,9 @@ app.get('/items', async (req, res) => {
 });
 
 app.delete('/delete/:id', async (req, res) => {
-    const itemId = req.params.id;
+    const Id = req.params.id;
     try {
-        await Reviews.findOneAndDelete({ _id: itemId });
+        await Users.findOneAndDelete({ _id: Id });
         res.sendStatus(200);
     } catch (error) {
         console.error('Ошибка при удалении отзыва', error);
