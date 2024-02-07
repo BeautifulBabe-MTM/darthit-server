@@ -76,7 +76,7 @@ app.use('/uploads', express.static('uploads'));
 //
 //});
 
-app.get('/items', async (req, res) => {
+app.get('/users', async (req, res) => {
     try {
         const items = await Users.find({});
         res.json(items);
@@ -86,7 +86,7 @@ app.get('/items', async (req, res) => {
     }
 });
 
-app.delete('/delete/:id', async (req, res) => {
+app.delete('/deleteUser/:id', async (req, res) => {
     const Id = req.params.id;
     try {
         await Users.findOneAndDelete({ _id: Id });
