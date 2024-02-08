@@ -51,32 +51,6 @@ app.get('/', (req, res) => {
 
 app.use('/uploads', express.static('uploads'));
 
-//app.post('/add', async (req, res) => {
-//    const userId = req.body.userId; 
-//    const phoneNumber = req.body.phoneNumber;
-//
-//    try {
-//        const newItem = new Users({
-//            userId: Number,
-//            phoneNumber: String,
-//            username: String,
-//            name: String,
-//            balance: Number,
-//            luck: Number,
-//            min_balance_to_payout: Number,
-//            deposit_amounts: Array,
-//            hasBeenCounted: Boolean
-//        });
-//
-//        await newItem.save();
-//        return res.json({ message: 'Файл успешно сохранен' });
-//    } catch (error) {
-//        console.error('Ошибка при сохранении ссылки на фото', error);
-//        return res.status(500).json({ error: 'Произошла ошибка при сохранении ссылки на фото' });
-//    }
-//
-//});
-
 app.get('/users', async (req, res) => {
     try {
         const items = await Users.find({});
@@ -84,6 +58,19 @@ app.get('/users', async (req, res) => {
     } catch (err) {
         console.error(err);
         res.sendStatus(500);
+    }
+});
+
+app.put('/updateUser/:id', async (req, res) => {
+    const userId = req.params.id;
+    const newData = req.body; // Новые данные для обновления
+
+    try {
+        await Users.findOneAndUpdate({ _id: userId }, newData);
+        res.sendStatus(200); 
+    } catch (error) {
+        console.error('Ошибка при обновлении данных пользователя', error);
+        res.sendStatus(500); 
     }
 });
 
