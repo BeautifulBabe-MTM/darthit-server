@@ -63,7 +63,7 @@ app.get('/users', async (req, res) => {
 
 app.put('/updateUser/:id', async (req, res) => {
     const userId = req.params.id;
-    const newData = req.body; // Новые данные для обновления
+    const newData = req.body;
 
     try {
         await Users.findOneAndUpdate({ _id: userId }, newData);
