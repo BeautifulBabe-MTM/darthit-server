@@ -25,6 +25,7 @@ const usersSchema = new mongoose.Schema({
 
 const Users = mongoose.model('users', usersSchema);
 
+//http://localhost:5173
 const corsOptions = {
     origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
