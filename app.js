@@ -25,6 +25,16 @@ const usersSchema = new mongoose.Schema({
 
 const Users = mongoose.model('users', usersSchema);
 
+const partnersSchema = new mongoose.Schema({
+    userId: Number,
+    phoneNumber: String,
+    username: String,
+    name: String,
+    referals: Number
+});
+
+const Partners = mongoose.model('partners', partnersSchema);
+
 //http://localhost:5173
 const corsOptions = {
     origin: '*',
@@ -60,7 +70,6 @@ app.get('/users', async (req, res) => {
         res.sendStatus(500);
     }
 });
-
 app.put('/updateUser/:id', async (req, res) => {
     const userId = req.params.id;
     const newData = req.body;
@@ -73,7 +82,6 @@ app.put('/updateUser/:id', async (req, res) => {
         res.sendStatus(500); 
     }
 });
-
 app.delete('/deleteUser/:id', async (req, res) => {
     const Id = req.params.id;
     try {
@@ -81,6 +89,27 @@ app.delete('/deleteUser/:id', async (req, res) => {
         res.sendStatus(200);
     } catch (error) {
         console.error('Ошибка при удалении отзыва', error);
+        res.sendStatus(500);
+    }
+});
+
+
+app.get('/partners', async (req, res) => {
+    try {
+        const partners = await Partners.find({});
+        res.json(partners);
+    } catch (err) {
+        console.error(err);
+        res.sendStatus(500);
+    }
+});
+app.delete('/deletePartner/:id', async (req, res) => {
+    const partnerId = req.params.id;
+    try {
+        await Partners.findOneAndDelete({ _id: partnerId });
+        res.sendStatus(200);
+    } catch (error) {
+        console.error('Ошибка при удалении партнера', error);
         res.sendStatus(500);
     }
 });
