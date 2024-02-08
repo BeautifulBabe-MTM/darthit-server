@@ -26,7 +26,7 @@ const usersSchema = new mongoose.Schema({
 const Users = mongoose.model('users', usersSchema);
 
 const corsOptions = {
-    origin: 'https://spanish-bot-crud-production.up.railway.app/',
+    origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
     optionsSuccessStatus: 204,
